@@ -1,0 +1,6 @@
+export { Header } from "./Header"
+export { Login } from "./Login"
+export { MainPage } from "./MainPage"
+export { PageNotFound } from "./PageNotFound"
+export { Profile } from "./Profile"
+export { SingleTask } from "./SingleTask"
