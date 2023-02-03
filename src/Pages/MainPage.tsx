@@ -1,29 +1,34 @@
 import { FC, useState, useEffect } from "react";
 import { Input, Button } from "../components/common";
-import { TaskList } from "../components/TaskList/TaskList";
+import { List } from "../components/List/List";
 
-interface TasksState {
+interface Tasks {
     id: number;
     label: string;
 }
 
-export const MainPage = () => {
+export const MainPage: FC = () => {
     const [inputValue, setInputValue] = useState("");
-    const [tasks, setTasks] = useState<TasksState[]>(JSON.parse(localStorage.getItem("tasks")!));
+    const [tasks, setTasks] = useState<Tasks[]>(JSON.parse(localStorage.getItem("tasks") ?? '[]'));
+
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(tasks));
-    }, [tasks])
+    }, [tasks]);
 
     const addItem = (newTask: string) => {
-        setTasks([...tasks, { label: newTask, id: tasks.length }]);
+        setTasks((prevTasks) => inputValue.trim().length ? [...prevTasks, { label: newTask, id: Math.floor(Math.random() * 100) }] : prevTasks);
+        setInputValue('');
+    }
+    const deleteItem = (id: number) => {
+        const newTasks = tasks.filter((task) => task.id !== id);
+        setTasks(newTasks);
     }
 
     return (
         <div className="App">
             <Input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
             <Button onClick={() => addItem(inputValue)}>Add</Button>
-            <Button onClick={() => console.log(tasks)}>Show tasks</Button>
-            <TaskList task={tasks} />
+            <List listItem={tasks} onClick={deleteItem} />
         </div>
     );
 }

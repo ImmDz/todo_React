@@ -1,15 +1,16 @@
 import { FC, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 
-interface TasksState {
+interface Task {
     id: number;
     label: string;
-  }
+}
 
 export const SingleTask: FC = () => {
-    const [tasks, setTasks] = useState<TasksState[]>(JSON.parse(localStorage.getItem("tasks")!));
+    const [tasks, setTasks] = useState<Task[]>(JSON.parse(localStorage.getItem("tasks") ?? '[]'));
     const { id } = useParams();
+    const task = tasks.find((task) => task.id === Number(id));
     return (
-        <span>{tasks.map((item) => item.id === Number(id) ? <p key={item.id}>{item.label}</p> : undefined)}</span>
+        <p>{task?.label ?? <Navigate to="/"/>}</p>
     )
 }
